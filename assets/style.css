@@ -1,0 +1,38 @@
+body {
+    background-color: #b9edc7;
+    font-family: Arial, sans-serif;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.header {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.graph-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.dash-dropdown {
+    width: 30%;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.dash-graph{
+margin-bottom: 50px;
+}
+.DataTable {
+    margin: auto;
+}
