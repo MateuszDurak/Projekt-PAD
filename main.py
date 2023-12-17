@@ -5,11 +5,6 @@ from dash import html, dcc, dash_table
 from dash.dependencies import Input, Output
 from joblib import load
 
-# Pomysł!!
-# Funkcja która bierze znormalizowane i przygotowane dane, wyświetla wszystkie kolumny
-# w multiselect liście i pozwala na podstawie zaznaczoyuch kolumn przetrenować model
-# następnie zwraca informacje takie jak błąd średnio kwadratowy oraz jakiś wykres
-
 df = pd.read_csv('diamonds_cleared.csv')
 y_pred_sfs = load('y_pred_sfs.joblib')
 model_sfs = load('model_sfs.joblib')
@@ -21,12 +16,8 @@ categorical_columns = ['clarity', 'color', 'cut']
 
 app = dash.Dash(__name__)
 def update_residuals_plot():
-    # Dokonaj przewidywań modelu
     y_pred_sfs = model_sfs.predict(X_test_sfs)
-    # Oblicz reszty
-    residuals = y_test_sfs['price'] - y_pred_sfs  # Użyj nazwy kolumny 'price', jeśli taka istnieje
-
-    # Stwórz wykres
+    residuals = y_test_sfs['price'] - y_pred_sfs
     fig = px.scatter(x=y_pred_sfs, y=residuals, labels={'x': 'Przewidywane wartości', 'y': 'Reszty'})
     fig.add_hline(y=0, line_dash="dash")
     fig.update_layout(
@@ -37,7 +28,6 @@ def update_feature_importance_plot():
     feature_importance = pd.DataFrame(model_sfs.coef_, index=X_train_sfs.columns, columns=['importance'])
     feature_importance = feature_importance.sort_values('importance', ascending=False)
 
-    # Stwórz wykres
     fig = px.bar(feature_importance, x='importance', y=feature_importance.index, orientation='h')
     fig.update_layout(title='Wizualizacja ważności cech dla modelu selekcji postępującej',
                       xaxis_title='Ważność cechy',
@@ -47,7 +37,7 @@ def update_feature_importance_plot():
     return fig
 def update_predicted_vs_actual_plot():
     # Stwórz wykres
-    fig = px.scatter(x=y_test_sfs['price'], y=y_pred_sfs)  # Użyj nazwy kolumny 'price'
+    fig = px.scatter(x=y_test_sfs['price'], y=y_pred_sfs)
     fig.add_scatter(x=[y_test_sfs['price'].min(), y_test_sfs['price'].max()],
                     y=[y_test_sfs['price'].min(), y_test_sfs['price'].max()],
                     mode='lines', line=dict(color='red', dash='dash'),
@@ -170,9 +160,5 @@ def update_table(xaxis_column_name):
     ])
     return table
 
-
-
-
-# Uruchomienie serwera
 if __name__ == '__main__':
     app.run_server(debug=True)
